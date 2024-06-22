@@ -7,6 +7,7 @@ import java.util.Random;
 public class Env {
     private static List<Objet> objets;
     private static List<Integer> budgets;
+    private int fitness;
 
     // Initialiser les objets et les budgets
     public static void initialiser(int nombreDObjets, int nombreDeContraintes, int maxUtilite, int maxCout, long seed) {
@@ -20,11 +21,6 @@ public class Env {
             int budget = random.nextInt(budgetBase / 2) + budgetBase; // Budgets sont entre budgetBase et 1.5*budgetBase
             budgets.add(budget);
         }
-
-        // Créer les objets
-        //for (int i = 0; i < nombreDObjets; i++) {
-        //    objets.add(new Objet(nombreDeContraintes, maxUtilite, maxCout));
-        //}
 
         for (int i = 0; i < nombreDObjets; i++) {
             List<Integer> couts = new ArrayList<>();

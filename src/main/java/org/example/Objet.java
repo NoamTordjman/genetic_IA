@@ -55,9 +55,5 @@ public class Objet {
     @Override
     public String toString() {
         return STR."\noi{utilite=\{utilite}, couts=\{couts}\{'}'}";
-        //return "Objet{" +
-        //        "utilite=" + utilite +
-        //        ", couts=" + couts +
-        //        '}';
     }
 }
