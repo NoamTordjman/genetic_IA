@@ -26,34 +26,37 @@ public class Population {
         List<Sac> selected = new ArrayList<>();
         double totalFitness = sacs.stream().mapToDouble(Sac::getFitness).sum();
         Random random = new Random();
+        int targetSize = sacs.size() - (sacs.size() % 2);  // Assurer un nombre pair
 
-        for (int i = 0; i < sacs.size() / 2; i++) {  // Créer des couples donc besoin de la moitié de la taille
+        while (selected.size() < targetSize) {
             double rand = random.nextDouble() * totalFitness;
             double runningSum = 0;
             for (Sac sac : sacs) {
                 runningSum += sac.getFitness();
-                if (runningSum >= rand) {
+                if (runningSum >= rand && !selected.contains(sac)) {
                     selected.add(sac);
                     break;
                 }
             }
         }
-        System.out.println("Selected : "+ selected.size());
-        return selected;  // Retourne la liste des sacs sélectionnés pour le crossover
+        return selected;
     }
 
     public List<Sac> crossover(List<Sac> selectedSacs) {
         List<Sac> newPopulation = new ArrayList<>();
         Random random = new Random();
+
+        // Assurer un nombre pair pour le crossover
+        if (selectedSacs.size() % 2 != 0) {
+            selectedSacs.add(selectedSacs.get(random.nextInt(selectedSacs.size())));
+        }
+
         for (int i = 0; i < selectedSacs.size(); i += 2) {
             Sac parent1 = selectedSacs.get(i);
             Sac parent2 = selectedSacs.get(i + 1);
-
-            // Créer deux enfants
-            Sac child1 = new Sac();
-            Sac child2 = new Sac();
-
-            //ICI REVOIR LA PARTIE DE SELECTION OBJET PERE / MERE POUR LE FILS
+            // Générer deux enfants
+            Sac child1 = new Sac(random);
+            Sac child2 = new Sac(random);
             for (int j = 0; j < parent1.getContenu().size(); j++) {
                 boolean geneFromParent1 = random.nextBoolean();
                 child1.getContenu().set(j, geneFromParent1 ? parent1.getContenu().get(j) : parent2.getContenu().get(j));
@@ -62,17 +65,16 @@ public class Population {
             newPopulation.add(child1);
             newPopulation.add(child2);
         }
-        return newPopulation;  // Retourne la nouvelle population
+        return newPopulation;
     }
 
 
     public void evolve(int numberOfGenerations, double mutationRate) {
         Random random = new Random();
         for (int gen = 0; gen < numberOfGenerations; gen++) {
-            List<Sac> selected = selection(); // Sélection basée sur la fitness
-            List<Sac> offspring = crossover(selected); // Génération de descendants via crossover
+            List<Sac> selected = selection();                   // Sélection basée sur la fitness
+            List<Sac> offspring = crossover(selected);          // Génération de descendants via crossover
 
-            System.out.println("offspring : " + offspring);
             // Appliquer la mutation définie dans chaque Sac
             for (Sac sac : offspring) {
                 sac.muter(mutationRate, random);
