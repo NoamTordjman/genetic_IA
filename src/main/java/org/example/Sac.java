@@ -43,38 +43,56 @@ public class Sac {
         }
     }
     public Sac() {
-        Random random = new Random();
         int nombreDeContraintes = Env.getBudgets().size();
         int nombreDObjets = Env.getObjets().size();
 
         this.contenu = new ArrayList<>(nombreDObjets);
         this.coutsActuels = new ArrayList<>(nombreDeContraintes);
 
-        // Initialiser les coûts actuels à zéro
+        // Initialiser les coûts actuels à zéro et le contenu à false
+        for (int i = 0; i < nombreDObjets; i++) {
+            this.contenu.add(false); // Aucun objet inclus
+        }
         for (int j = 0; j < nombreDeContraintes; j++) {
-            coutsActuels.add(0);
+            this.coutsActuels.add(0); // Coûts initiaux à zéro
         }
 
-        //Random random = new Random();
-        // Initialiser le contenu du sac de manière aléatoire mais en respectant les budgets
-        for (int i = 0; i < nombreDObjets; i++) {
-            boolean addItem = random.nextBoolean(); // Décide aléatoirement si l'objet doit être envisagé
-            if (addItem) {
-                List<Integer> coutsObjet = Env.getObjets().get(i).getCouts();
-                if (peutAjouter(coutsObjet)) {
-                    contenu.add(true);
-                    // Mettre à jour les coûts actuels
-                    for (int j = 0; j < nombreDeContraintes; j++) {
-                        coutsActuels.set(j, coutsActuels.get(j) + coutsObjet.get(j));
-                    }
-                } else {
-                    contenu.add(false);
-                }
-            } else {
-                contenu.add(false);
-            }
-        }
+        this.fitness = 0; // Fitness initiale à zéro
     }
+
+//    public Sac() {
+//        Random random = new Random();
+//        int nombreDeContraintes = Env.getBudgets().size();
+//        int nombreDObjets = Env.getObjets().size();
+//
+//        this.contenu = new ArrayList<>(nombreDObjets);
+//        this.coutsActuels = new ArrayList<>(nombreDeContraintes);
+//
+//        // Initialiser les coûts actuels à zéro
+//        for (int j = 0; j < nombreDeContraintes; j++) {
+//            coutsActuels.add(0);
+//        }
+//
+//        //Random random = new Random();
+//        // Initialiser le contenu du sac de manière aléatoire mais en respectant les budgets
+//        for (int i = 0; i < nombreDObjets; i++) {
+//            boolean addItem = random.nextBoolean(); // Décide aléatoirement si l'objet doit être envisagé
+//            if (addItem) {
+//                List<Integer> coutsObjet = Env.getObjets().get(i).getCouts();
+//                if (peutAjouter(coutsObjet)) {
+//                    contenu.add(true);
+//                    // Mettre à jour les coûts actuels
+//                    for (int j = 0; j < nombreDeContraintes; j++) {
+//                        coutsActuels.set(j, coutsActuels.get(j) + coutsObjet.get(j));
+//                    }
+//                } else {
+//                    contenu.add(false);
+//                }
+//            } else {
+//                contenu.add(false);
+//            }
+//        }
+//    }
 
 
     public void updateFitness() {
@@ -178,8 +196,18 @@ public class Sac {
         this.fitness = fitness;
     }
 
+
+
     @Override
     public String toString() {
-        return STR."Sac{contenu=\{contenu}, coutsActuels=\{coutsActuels}\{'}'}";
+        return STR."Sac{\ncontenu=\{contenu}, \ncoutsActuels=\{coutsActuels}\{'}'}";
+    }
+
+    public Sac copy() {
+        Sac newSac = new Sac();
+        newSac.contenu = new ArrayList<>(this.contenu);
+        newSac.coutsActuels = new ArrayList<>(this.coutsActuels);
+        newSac.fitness = this.fitness;
+        return newSac;
     }
 }

@@ -1,14 +1,10 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Population {
     private List<Sac> sacs;
-    //private int nbContraintes = Env.getBudgets().size();
-    //private int nbObj = Env.getObjets().size();
-
     public Population(int nombreDeSacs, long seed) {
         this.sacs = new ArrayList<>();
         Random random = new Random(seed);
@@ -21,69 +17,59 @@ public class Population {
         }
     }
 
-
-    public List<Sac> selection() {
-        List<Sac> selected = new ArrayList<>();
-        double totalFitness = sacs.stream().mapToDouble(Sac::getFitness).sum();
-        Random random = new Random();
-        int targetSize = sacs.size() - (sacs.size() % 2);  // Assurer un nombre pair
-
-        while (selected.size() < targetSize) {
-            double rand = random.nextDouble() * totalFitness;
-            double runningSum = 0;
-            for (Sac sac : sacs) {
-                runningSum += sac.getFitness();
-                if (runningSum >= rand && !selected.contains(sac)) {
-                    selected.add(sac);
-                    break;
-                }
-            }
-        }
-        return selected;
+    public Population() {
+        this.sacs = new ArrayList<>();
     }
 
-    public List<Sac> crossover(List<Sac> selectedSacs) {
-        List<Sac> newPopulation = new ArrayList<>();
-        Random random = new Random();
+    public void add(Sac sac) {
+        sacs.add(sac);
+    }
 
-        // Assurer un nombre pair pour le crossover
-        if (selectedSacs.size() % 2 != 0) {
-            selectedSacs.add(selectedSacs.get(random.nextInt(selectedSacs.size())));
-        }
+    public Sac get(int index) {
+        return sacs.get(index);
+    }
 
-        for (int i = 0; i < selectedSacs.size(); i += 2) {
-            Sac parent1 = selectedSacs.get(i);
-            Sac parent2 = selectedSacs.get(i + 1);
-            // Générer deux enfants
-            Sac child1 = new Sac(random);
-            Sac child2 = new Sac(random);
-            for (int j = 0; j < parent1.getContenu().size(); j++) {
-                boolean geneFromParent1 = random.nextBoolean();
-                child1.getContenu().set(j, geneFromParent1 ? parent1.getContenu().get(j) : parent2.getContenu().get(j));
-                child2.getContenu().set(j, !geneFromParent1 ? parent1.getContenu().get(j) : parent2.getContenu().get(j));
-            }
-            newPopulation.add(child1);
-            newPopulation.add(child2);
-        }
-        return newPopulation;
+    public int size() {
+        return sacs.size();
+    }
+
+    public Iterator<Sac> iterator() {
+        return sacs.iterator();
+    }
+
+    public void replace(int index, Sac newSac) {
+        sacs.set(index, newSac);
+    }
+
+    public List<Sac> getTopFitnessSacs(int count) {
+        return sacs.stream()
+                .sorted(Comparator.comparingInt(Sac::getFitness).reversed())
+                .limit(count)
+                .collect(Collectors.toList());
     }
 
 
-    public void evolve(int numberOfGenerations, double mutationRate) {
-        Random random = new Random();
-        for (int gen = 0; gen < numberOfGenerations; gen++) {
-            List<Sac> selected = selection();                   // Sélection basée sur la fitness
-            List<Sac> offspring = crossover(selected);          // Génération de descendants via crossover
+    public Sac getHighestFitnessSac() {
+        if (sacs == null || sacs.isEmpty()) {
+            return null; // Retourne null si la population est vide
+        }
 
-            // Appliquer la mutation définie dans chaque Sac
-            for (Sac sac : offspring) {
+        Sac bestSac = sacs.get(0); // Initialise le meilleur sac au premier sac de la liste
+        for (Sac sac : sacs) {
+            if (sac.getFitness() > bestSac.getFitness()) {
+                bestSac = sac; // Met à jour le meilleur sac si un sac avec une meilleure fitness est trouvé
+            }
+        }
+        return bestSac; // Retourne le sac ayant la meilleure fitness
+    }
+
+    public void performMutation(double mutationRate, Random random) {
+        for (Sac sac : sacs) {
+            if (random.nextDouble() < mutationRate) {
                 sac.muter(mutationRate, random);
             }
-
-            sacs = offspring; // Remplacer l'ancienne population par la nouvelle
         }
     }
-
 
     public List<Sac> getSacs() {
         return sacs;
