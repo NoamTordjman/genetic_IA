@@ -21,6 +21,16 @@ public class Population {
         this.sacs = new ArrayList<>();
     }
 
+    public Population(int nombreDeSacs) {
+        this.sacs = new ArrayList<>();
+
+        // Créer des sacs initiaux tous "vides"
+        for (int k = 0; k < nombreDeSacs; k++) {
+            Sac sac = new Sac(); // Utiliser le nouveau constructeur
+            sacs.add(sac);
+        }
+    }
+
     public void add(Sac sac) {
         sacs.add(sac);
     }

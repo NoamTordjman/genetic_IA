@@ -21,18 +21,17 @@ public class Main {
         //double elitismeRate = 0.2;
         //Random random = new Random(seed);
 
-        int nombreDObjets = 100; // Définir le nombre d'objets
-        int nombreDeContraintes = 10; // Définir le nombre de contraintes
-        int maxUtilite = 10000; // L'utilité maximale pour les objets
-        int maxCout = 100; // Le coût maximal pour les objets
-        long seed = 1234L; // Seed pour la reproductibilité
-        int populationSize = 20; // Taille de la population
-        double mutationRate = 0.5; // Taux de mutation
-        double elitismRate = 0.2; // Taux d'élitisme
-        int maxGenerations = 200; // Nombre maximum de générations
+        int nombreDObjets = 50;             // Définir le nombre d'objets
+        int nombreDeContraintes = 20;       // Définir le nombre de contraintes
+        int maxUtilite = 1000;              // L'utilité maximale pour les objets
+        int maxCout = 50;                   // Le coût maximal pour les objets
+        long seed = 1234L;                  // Seed pour la reproductibilité
+        int populationSize = 100;           // Taille de la population
+        double mutationRate = 0.2;          // Taux de mutation
+        double elitismRate = 0.9;           // Taux d'élitisme
+        int maxGenerations = 400;           // Nombre maximum de générations
 
         Env.initialiser(nombreDObjets, nombreDeContraintes, maxUtilite, maxCout, seed);
-
 
         System.out.println("--------------------------------------------------- ENV ------------------------------------------------------------------------------------------------------");
         System.out.println("OBJETS  ------- : " + Env.getObjets());

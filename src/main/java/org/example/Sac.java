@@ -95,6 +95,24 @@ public class Sac {
 //    }
 
 
+    // Cette méthode parcourt tous les objets et met à jour les coûts actuels basés sur les objets inclus
+    public void updateCoutsActuels() {
+        // Réinitialiser les coûts actuels à zéro avant la mise à jour
+        for (int j = 0; j < coutsActuels.size(); j++) {
+            coutsActuels.set(j, 0);
+        }
+
+        // Parcourir chaque objet et, si inclus, ajouter ses coûts aux coûts actuels
+        for (int i = 0; i < contenu.size(); i++) {
+            if (contenu.get(i)) {
+                List<Integer> coutsObjet = Env.getObjets().get(i).getCouts();
+                for (int j = 0; j < coutsActuels.size(); j++) {
+                    coutsActuels.set(j, coutsActuels.get(j) + coutsObjet.get(j));
+                }
+            }
+        }
+    }
+
     public void updateFitness() {
         fitness = 0;
         for (int i = 0; i < contenu.size(); i++) {
@@ -126,6 +144,7 @@ public class Sac {
         }
         reparer(); // Réparer le sac après mutation pour garantir l'admissibilité
         updateFitness(); // Mise à jour de la fitness après réparation
+        updateCoutsActuels();
     }
 
 
