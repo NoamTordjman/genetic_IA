@@ -64,13 +64,13 @@ public class Population {
             return null; // Retourne null si la population est vide
         }
 
-        Sac bestSac = sacs.get(0); // Initialise le meilleur sac au premier sac de la liste
+        Sac bestSac = sacs.get(0);          // Initialise le meilleur sac au premier sac de la liste
         for (Sac sac : sacs) {
             if (sac.getFitness() > bestSac.getFitness()) {
-                bestSac = sac; // Met à jour le meilleur sac si un sac avec une meilleure fitness est trouvé
+                bestSac = sac;              // Met à jour le meilleur sac si un sac avec une meilleure fitness est trouvé
             }
         }
-        return bestSac; // Retourne le sac ayant la meilleure fitness
+        return bestSac;                     // Retourne le sac ayant la meilleure fitness
     }
 
     public void performMutation(double mutationRate, Random random) {

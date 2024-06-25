@@ -47,13 +47,15 @@ public class GeneticAlgorithm {
             int index2 = selector.randomChoice();
             attempts = 0;
 
+            //Est-ce que ca choisit bien le parent en fonction de la probabilité aka utilité fitness
+
             // Assurer que les deux parents ne sont pas les mêmes
             while (index1 == index2) {
                 attempts++;
                 if (attempts > attemptThreshold) {
                     // Appliquer une mutation forcée pour tenter de diversifier la population
-                    population.get(index1).muter(0.1, random); // Mutation à 100% de probabilité
-                    population.get(index1).updateFitness(); // Mettre à jour la fitness après mutation
+                    population.get(index1).muter(0.1, random);      // Mutation à 100% de probabilité
+                    population.get(index1).updateFitness();                     // Mettre à jour la fitness après mutation
                     population.get(index1).updateCoutsActuels();
                     break;
                 }
@@ -96,19 +98,20 @@ public class GeneticAlgorithm {
         }
         return newPopulation;
     }
+    //CrossOver en fonction de l'utilité de l'item
 
 
     public Sac solve(double mutationRate, double elitismRate, int maxGenerations) {
         int generation = 0;
         while (generation < maxGenerations) {
-            System.out.println("------------------------------------------------------------------");
-            System.out.println("Generation : " + generation);
-            System.out.println(population);
+            //System.out.println("------------------------------------------------------------------");
+            //System.out.println("Generation : " + generation);
+            //System.out.println(population);
             ArrayList<Couple> parents = this.selection();           // Obtient les couples pour la reproduction
             Population newPopulation = this.crossover(parents);     // Crée une nouvelle population par crossover
-            System.out.println("-------------");
-            System.out.println(newPopulation);
-            System.out.println("------------------------------------------------------------------");
+            //System.out.println("-------------");
+            //System.out.println(newPopulation);
+            //System.out.println("------------------------------------------------------------------");
 
             // Mutation
             for (int i = 0; i < newPopulation.size(); i++) {
